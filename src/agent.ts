@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { Settings } from "./config.js";
 import { sleep, ToolExecutor } from "./executor.js";
+import { enforce, screenTicket } from "./guardrails.js";
 import {
   toToolSpec,
   toolSpecs,
@@ -99,8 +100,7 @@ export class RefundAgent {
     today: string,
     tracer: Tracer,
   ): Promise<AgentResult> {
-    const { settings, llm, orders, cases, policies } = this.deps;
-
+    const { settings, orders, cases, policies } = this.deps;
     const parsed = TicketSchema.safeParse(rawTicket);
     if (!parsed.success) {
       const errors = parsed.error.issues.map(
@@ -121,9 +121,18 @@ export class RefundAgent {
     }
     const ticket = parsed.data;
 
-    const flags: string[] = [];
-    const subject = ticket.subject;
-    const body = ticket.body;
+    const screen = screenTicket(ticket.subject, ticket.body);
+    const { flags, subject, body } = screen;
+    if (flags.length > 0) {
+      const patterns =
+        screen.matchedPatterns.length > 0
+          ? ` [${screen.matchedPatterns.join(", ")}]`
+          : "";
+      tracer.event("guardrail", {
+        rule: "input_screen",
+        detail: `${flags.join(", ")}${patterns}`,
+      });
+    }
 
     const ctx: ToolContext = {
       ticket,
@@ -132,7 +141,7 @@ export class RefundAgent {
       orders,
       cases,
       policies,
-      sideEffectsAllowed: true,
+      sideEffectsAllowed: !screen.blockSideEffects,
       eligibility: new Map(),
     };
     const executor = new ToolExecutor(this.tools, tracer, this.wait);
@@ -205,7 +214,6 @@ export class RefundAgent {
               payload: check.data,
             });
           } else {
-            // Repair: tell the model exactly what was wrong and let it try again.
             repairs++;
             tracer.event("invalid_decision", {
               step: steps,
@@ -243,6 +251,7 @@ export class RefundAgent {
 
     return this.finalize(
       ticket,
+      ctx,
       decision,
       failure,
       records,
@@ -293,6 +302,7 @@ export class RefundAgent {
 
   private finalize(
     ticket: Ticket,
+    ctx: ToolContext,
     decision: DecisionPayload | null,
     failure: string | null,
     records: ToolCallRecord[],
@@ -325,20 +335,62 @@ export class RefundAgent {
       });
     }
 
+    const lookup = records.find((r) => r.tool === "lookup_order" && r.ok)
+      ?.result as { currency?: string } | undefined;
+    const enforced = enforce(
+      decision,
+      records,
+      ctx.eligibility,
+      flags,
+      ticket.customer_email,
+      lookup?.currency ?? "EUR",
+    );
+    for (const o of enforced.overrides)
+      tracer.event("guardrail", { rule: "decision_override", detail: o });
+
+    const overrides = [...enforced.overrides];
+    if (enforced.needsAutoEscalation) {
+      const esc = this.deps.cases.createEscalation(
+        ticket.ticket_id,
+        decision.order_id,
+        decision.reasons.join("; ").slice(0, 500),
+        "normal",
+      );
+      overrides.push(
+        `Auto-created escalation ${esc.escalationId} for human review.`,
+      );
+    }
+
+    const knownRefs = this.deps.policies.refs();
     return baseResult(tracer.traceId, ticket.ticket_id, {
       ...common,
       intent: decision.intent,
-      decision: decision.decision,
+      decision: enforced.decision,
       orderId: decision.order_id,
       reasonCategory: decision.reason_category,
-      refundAmount:
-        decision.decision === "approve_refund" ? decision.refund_amount : null,
-      requiresHuman: decision.decision === "escalate",
+      refundAmount: enforced.refundAmount,
+      requiresHuman: enforced.requiresHuman,
       reasons: decision.reasons,
-      policyRefs: decision.policy_refs,
-      customerReply: decision.customer_reply,
+      policyRefs: decision.policy_refs.filter((ref) => knownRefs.has(ref)),
+      customerReply: enforced.customerReply,
+      overrides,
     });
   }
+}
+
+function consistencyProblem(
+  d: DecisionPayload,
+  records: ToolCallRecord[],
+  ticket: Ticket,
+): string | null {
+  const knownIds = ticket.order_id
+    ? [ticket.order_id]
+    : findOrderIds(`${ticket.subject}\n${ticket.body}`);
+  const triedLookup = records.some((r) => r.tool === "lookup_order");
+  if (d.decision === "need_more_info" && knownIds.length > 0 && !triedLookup) {
+    return `The ticket contains order id ${knownIds.join(", ")}. Call lookup_order before asking the customer for information.`;
+  }
+  return null;
 }
 
 function assistantMessage(r: LlmResponse): ChatMessage {
@@ -410,18 +462,4 @@ export function renderSummary(r: AgentResult): string {
   for (const o of r.overrides) lines.push(`Override: ${o}`);
   if (r.requiresHuman) lines.push("Human review REQUIRED.");
   return lines.join("\n");
-}
-function consistencyProblem(
-  d: DecisionPayload,
-  records: ToolCallRecord[],
-  ticket: Ticket,
-): string | null {
-  const knownIds = ticket.order_id
-    ? [ticket.order_id]
-    : findOrderIds(`${ticket.subject}\n${ticket.body}`);
-  const triedLookup = records.some((r) => r.tool === "lookup_order");
-  if (d.decision === "need_more_info" && knownIds.length > 0 && !triedLookup) {
-    return `The ticket contains order id ${knownIds.join(", ")}. Call lookup_order before asking the customer for information.`;
-  }
-  return null;
 }
