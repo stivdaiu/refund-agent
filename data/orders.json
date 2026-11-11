@@ -1,0 +1,220 @@
+[
+  {
+    "order_id": "ORD-1001",
+    "customer_email": "alice@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-28",
+    "delivered_at": "2026-11-01",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "MUG-SET-4",
+        "name": "Stoneware mug set (4 pcs)",
+        "unit_price": 39.9,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 4.9,
+    "total": 44.8,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1002",
+    "customer_email": "bob@example.com",
+    "status": "delivered",
+    "order_date": "2026-08-27",
+    "delivered_at": "2026-09-01",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "HP-200",
+        "name": "Wireless headphones",
+        "unit_price": 89.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 0,
+    "total": 89.0,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1003",
+    "customer_email": "carol@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-30",
+    "delivered_at": "2026-11-03",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "ESP-900",
+        "name": "Espresso machine",
+        "unit_price": 349.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 0,
+    "total": 349.0,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1004",
+    "customer_email": "dan@example.com",
+    "status": "shipped",
+    "order_date": "2026-11-06",
+    "delivered_at": null,
+    "carrier_eta": "2026-11-12",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "BK-SHELF",
+        "name": "Oak bookshelf",
+        "unit_price": 129.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 9.9,
+    "total": 138.9,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1005",
+    "customer_email": "erin@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-20",
+    "delivered_at": "2026-10-25",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "JKT-CLR",
+        "name": "Rain jacket (clearance)",
+        "unit_price": 59.0,
+        "qty": 1,
+        "final_sale": true
+      }
+    ],
+    "shipping_fee": 4.9,
+    "total": 63.9,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1006",
+    "customer_email": "frank@example.com",
+    "status": "delivered",
+    "order_date": "2026-11-01",
+    "delivered_at": "2026-11-05",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "LMP-DSK",
+        "name": "Desk lamp",
+        "unit_price": 45.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 4.9,
+    "total": 49.9,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1007",
+    "customer_email": "gina@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-10",
+    "delivered_at": "2026-10-14",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "TWL-SET",
+        "name": "Bath towel set",
+        "unit_price": 34.5,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 4.9,
+    "total": 39.4,
+    "currency": "EUR",
+    "refunded_amount": 34.5
+  },
+  {
+    "order_id": "ORD-1008",
+    "customer_email": "hank@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-15",
+    "delivered_at": "2026-10-20",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "SNK-42",
+        "name": "Running sneakers (EU 42)",
+        "unit_price": 120.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 0,
+    "total": 120.0,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1009",
+    "customer_email": "ivy@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-30",
+    "delivered_at": "2026-11-04",
+    "delivered_late": false,
+    "items": [
+      {
+        "sku": "CND-LAV",
+        "name": "Lavender candle",
+        "unit_price": 12.5,
+        "qty": 2,
+        "final_sale": false
+      },
+      {
+        "sku": "CND-GFT",
+        "name": "Gift box (clearance)",
+        "unit_price": 8.0,
+        "qty": 1,
+        "final_sale": true
+      }
+    ],
+    "shipping_fee": 4.9,
+    "total": 37.9,
+    "currency": "EUR",
+    "refunded_amount": 0
+  },
+  {
+    "order_id": "ORD-1010",
+    "customer_email": "jack@example.com",
+    "status": "delivered",
+    "order_date": "2026-10-25",
+    "delivered_at": "2026-11-07",
+    "delivered_late": true,
+    "items": [
+      {
+        "sku": "PLT-SET",
+        "name": "Ceramic plate set",
+        "unit_price": 64.0,
+        "qty": 1,
+        "final_sale": false
+      }
+    ],
+    "shipping_fee": 9.9,
+    "total": 73.9,
+    "currency": "EUR",
+    "refunded_amount": 0
+  }
+]
