@@ -276,7 +276,7 @@ OPENAI_MODEL=gpt-4o-mini
 
 | Setting | Default | What it means |
 |---|---|---|
-| `OPENAI_API_KEY` | (required) | Your OpenAI key. The `.env` file is never uploaded to Git |
+| `OPENAI_API_KEY` | (required) | Your OpenAI key |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Any OpenAI model that supports function calling |
 | `AUTO_REFUND_LIMIT` | `150` | Refunds above this amount (EUR) always go to a person |
 | `AGENT_MAX_STEPS` | `8` | Maximum number of AI steps per ticket |
