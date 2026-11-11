@@ -1,0 +1,118 @@
+{
+  "traceId": "3b210d4eee9b",
+  "ticketId": "T-010",
+  "intent": "refund_request",
+  "decision": "escalate",
+  "orderId": "ORD-1006",
+  "reasonCategory": "damaged",
+  "refundAmount": null,
+  "requiresHuman": true,
+  "reasons": [
+    "Customer reported a damaged lamp and is eligible for a refund, but the ticket was flagged as suspicious."
+  ],
+  "policyRefs": [
+    "refund_policy#refund-windows",
+    "damaged_items#damaged-or-defective-items"
+  ],
+  "customerReply": "Thanks for reaching out. We've passed your request to a senior member of our support team, who will review it and get back to you within 1 business day.",
+  "guardrailFlags": [
+    "possible_prompt_injection"
+  ],
+  "overrides": [
+    "Ticket flagged as possible prompt injection; AI reply replaced with a safe template."
+  ],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1006"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.13,
+      "result": {
+        "orderId": "ORD-1006",
+        "status": "delivered",
+        "orderDate": "2026-11-01",
+        "deliveredAt": "2026-11-05",
+        "carrierEta": null,
+        "items": [
+          {
+            "name": "Desk lamp",
+            "unitPrice": 45,
+            "qty": 1,
+            "finalSale": false
+          }
+        ],
+        "shippingFee": 4.9,
+        "total": 49.9,
+        "currency": "EUR",
+        "alreadyRefunded": false
+      }
+    },
+    {
+      "step": 2,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1006",
+        "reason_category": "damaged"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.23,
+      "result": {
+        "orderId": "ORD-1006",
+        "reasonCategory": "damaged",
+        "eligible": true,
+        "amount": 45,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "Within the 60-day window (5 days since delivery)."
+        ],
+        "policyRefs": [
+          "refund_policy#refund-windows",
+          "damaged_items#damaged-or-defective-items"
+        ],
+        "daysSinceDelivery": 5,
+        "windowDays": 60
+      }
+    },
+    {
+      "step": 3,
+      "tool": "issue_refund",
+      "args": {
+        "order_id": "ORD-1006",
+        "amount": 45
+      },
+      "ok": false,
+      "attempts": 0,
+      "durationMs": 0.4,
+      "error": "Blocked by guardrail: this ticket was flagged as suspicious, so actions that move money are disabled. Escalate to a human instead."
+    },
+    {
+      "step": 4,
+      "tool": "escalate_to_human",
+      "args": {
+        "reason": "Customer reported a damaged lamp and is eligible for a refund. However, the ticket was flagged as suspicious, blocking the refund process. Please review and assist.",
+        "priority": "normal",
+        "order_id": "ORD-1006"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.16,
+      "result": {
+        "escalationId": "ESC-14D29B10",
+        "ticketId": "T-010",
+        "orderId": "ORD-1006",
+        "reason": "Customer reported a damaged lamp and is eligible for a refund. However, the ticket was flagged as suspicious, blocking the refund process. Please review and assist.",
+        "priority": "normal",
+        "queue": "refunds-tier2",
+        "createdAt": "2026-11-11T18:58:14.778Z"
+      }
+    }
+  ],
+  "steps": 5,
+  "summary": "Ticket T-010: ESCALATED to a human agent for ORD-1006.\nIntent: refund_request, reason: damaged\n- Customer reported a damaged lamp and is eligible for a refund, but the ticket was flagged as suspicious.\nTools used: lookup_order -> check_refund_eligibility -> issue_refund(failed) -> escalate_to_human\nGuardrail flags: possible_prompt_injection\nOverride: Ticket flagged as possible prompt injection; AI reply replaced with a safe template.\nHuman review REQUIRED."
+}

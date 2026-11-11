@@ -1,0 +1,105 @@
+{
+  "traceId": "f79286f0bf70",
+  "ticketId": "T-003",
+  "intent": "refund_request",
+  "decision": "escalate",
+  "orderId": "ORD-1003",
+  "reasonCategory": "damaged",
+  "refundAmount": null,
+  "requiresHuman": true,
+  "reasons": [
+    "Customer requested a refund for a defective espresso machine. The amount exceeds the auto-approval limit."
+  ],
+  "policyRefs": [
+    "refund_policy#refund-windows",
+    "damaged_items#damaged-or-defective-items",
+    "refund_policy#approval-limits"
+  ],
+  "customerReply": "Thank you for reaching out about your espresso machine. I've escalated your request for a refund due to the defect, as it requires further review. You will be updated shortly.",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1003"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.15,
+      "result": {
+        "orderId": "ORD-1003",
+        "status": "delivered",
+        "orderDate": "2026-10-30",
+        "deliveredAt": "2026-11-03",
+        "carrierEta": null,
+        "items": [
+          {
+            "name": "Espresso machine",
+            "unitPrice": 349,
+            "qty": 1,
+            "finalSale": false
+          }
+        ],
+        "shippingFee": 0,
+        "total": 349,
+        "currency": "EUR",
+        "alreadyRefunded": false
+      }
+    },
+    {
+      "step": 2,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1003",
+        "reason_category": "damaged"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.22,
+      "result": {
+        "orderId": "ORD-1003",
+        "reasonCategory": "damaged",
+        "eligible": true,
+        "amount": 349,
+        "currency": "EUR",
+        "requiresHuman": true,
+        "reasons": [
+          "Within the 60-day window (7 days since delivery).",
+          "Amount 349.00 exceeds the auto-approval limit of 150.00."
+        ],
+        "policyRefs": [
+          "refund_policy#refund-windows",
+          "damaged_items#damaged-or-defective-items",
+          "refund_policy#approval-limits"
+        ],
+        "daysSinceDelivery": 7,
+        "windowDays": 60
+      }
+    },
+    {
+      "step": 3,
+      "tool": "escalate_to_human",
+      "args": {
+        "reason": "Customer requested a refund for a defective espresso machine. The amount exceeds the auto-approval limit.",
+        "priority": "normal",
+        "order_id": "ORD-1003"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 2.4,
+      "result": {
+        "escalationId": "ESC-8555CB63",
+        "ticketId": "T-003",
+        "orderId": "ORD-1003",
+        "reason": "Customer requested a refund for a defective espresso machine. The amount exceeds the auto-approval limit.",
+        "priority": "normal",
+        "queue": "refunds-tier2",
+        "createdAt": "2026-11-11T18:57:37.755Z"
+      }
+    }
+  ],
+  "steps": 4,
+  "summary": "Ticket T-003: ESCALATED to a human agent for ORD-1003.\nIntent: refund_request, reason: damaged\n- Customer requested a refund for a defective espresso machine. The amount exceeds the auto-approval limit.\nTools used: lookup_order -> check_refund_eligibility -> escalate_to_human\nHuman review REQUIRED."
+}

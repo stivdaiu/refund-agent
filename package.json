@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "hello": "tsx src/hello.ts",
+    "agent": "tsx src/cli.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

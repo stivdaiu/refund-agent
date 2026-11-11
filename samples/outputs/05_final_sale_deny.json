@@ -1,0 +1,50 @@
+{
+  "traceId": "29b6c0c58a41",
+  "ticketId": "T-005",
+  "intent": "refund_request",
+  "decision": "deny_refund",
+  "orderId": "ORD-1005",
+  "reasonCategory": "changed_mind",
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "All items are final sale and cannot be returned for a change of mind."
+  ],
+  "policyRefs": [
+    "refund_policy#final-sale-items"
+  ],
+  "customerReply": "I'm sorry, but we cannot process a refund for the jacket as it is a final sale item. According to our policy, items cannot be returned for a change of mind. If you have any other questions, feel free to ask!",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1005",
+        "reason_category": "changed_mind"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.47,
+      "result": {
+        "orderId": "ORD-1005",
+        "reasonCategory": "changed_mind",
+        "eligible": false,
+        "amount": 0,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "All items are final sale and cannot be returned for a change of mind."
+        ],
+        "policyRefs": [
+          "refund_policy#final-sale-items"
+        ],
+        "daysSinceDelivery": 16,
+        "windowDays": 30
+      }
+    }
+  ],
+  "steps": 2,
+  "summary": "Ticket T-005: DENIED refund for ORD-1005.\nIntent: refund_request, reason: changed_mind\n- All items are final sale and cannot be returned for a change of mind.\nTools used: check_refund_eligibility"
+}

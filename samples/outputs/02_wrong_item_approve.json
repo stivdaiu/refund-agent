@@ -1,0 +1,99 @@
+{
+  "traceId": "bca3786aab7d",
+  "ticketId": "T-002",
+  "intent": "refund_request",
+  "decision": "approve_refund",
+  "orderId": "ORD-1008",
+  "reasonCategory": "wrong_item",
+  "refundAmount": 120,
+  "requiresHuman": false,
+  "reasons": [
+    "Within the 60-day window (21 days since delivery)."
+  ],
+  "policyRefs": [
+    "refund_policy#refund-windows"
+  ],
+  "customerReply": "Your refund of 120 EUR for the wrong size sneakers has been successfully issued. Thank you for your patience!",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1008"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.13,
+      "result": {
+        "orderId": "ORD-1008",
+        "status": "delivered",
+        "orderDate": "2026-10-15",
+        "deliveredAt": "2026-10-20",
+        "carrierEta": null,
+        "items": [
+          {
+            "name": "Running sneakers (EU 42)",
+            "unitPrice": 120,
+            "qty": 1,
+            "finalSale": false
+          }
+        ],
+        "shippingFee": 0,
+        "total": 120,
+        "currency": "EUR",
+        "alreadyRefunded": false
+      }
+    },
+    {
+      "step": 2,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1008",
+        "reason_category": "wrong_item"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.22,
+      "result": {
+        "orderId": "ORD-1008",
+        "reasonCategory": "wrong_item",
+        "eligible": true,
+        "amount": 120,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "Within the 60-day window (21 days since delivery)."
+        ],
+        "policyRefs": [
+          "refund_policy#refund-windows"
+        ],
+        "daysSinceDelivery": 21,
+        "windowDays": 60
+      }
+    },
+    {
+      "step": 3,
+      "tool": "issue_refund",
+      "args": {
+        "order_id": "ORD-1008",
+        "amount": 120
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.26,
+      "result": {
+        "refundId": "RF-FC4B9256",
+        "orderId": "ORD-1008",
+        "amount": 120,
+        "currency": "EUR",
+        "ticketId": "T-002",
+        "status": "issued",
+        "createdAt": "2026-11-11T18:57:32.244Z"
+      }
+    }
+  ],
+  "steps": 4,
+  "summary": "Ticket T-002: APPROVED refund of 120.00 for ORD-1008.\nIntent: refund_request, reason: wrong_item\n- Within the 60-day window (21 days since delivery).\nTools used: lookup_order -> check_refund_eligibility -> issue_refund"
+}

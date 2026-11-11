@@ -1,0 +1,20 @@
+{
+  "traceId": "1e45c296b83e",
+  "ticketId": "T-012",
+  "intent": "refund_request",
+  "decision": "need_more_info",
+  "orderId": null,
+  "reasonCategory": null,
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "Order number is required to process your refund request."
+  ],
+  "policyRefs": [],
+  "customerReply": "I'm sorry to hear that your vase arrived broken. To assist you further, could you please provide your order number?",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [],
+  "steps": 2,
+  "summary": "Ticket T-012: Asked the customer for more information.\nIntent: refund_request\n- Order number is required to process your refund request."
+}

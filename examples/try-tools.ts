@@ -1,6 +1,6 @@
-import { loadSettings } from "./config.js";
-import { TicketSchema } from "./models.js";
-import { CaseStore, OrderStore, PolicyIndex } from "./stores.js";
+import { loadSettings } from "../src/config.js";
+import { TicketSchema } from "../src/models.js";
+import { CaseStore, OrderStore, PolicyIndex } from "../src/stores.js";
 import {
   checkRefundEligibility,
   issueRefund,
@@ -8,7 +8,7 @@ import {
   searchPolicy,
   ToolError,
   type ToolContext,
-} from "./tools.js";
+} from "../src/tools.js";
 
 const settings = loadSettings();
 const orders = new OrderStore("data/orders.json");

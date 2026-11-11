@@ -1,0 +1,77 @@
+{
+  "traceId": "a54c65f9c379",
+  "ticketId": "T-007",
+  "intent": "refund_request",
+  "decision": "deny_refund",
+  "orderId": "ORD-1007",
+  "reasonCategory": "damaged",
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "This order has already been refunded."
+  ],
+  "policyRefs": [
+    "refund_policy#one-refund-per-order"
+  ],
+  "customerReply": "I'm sorry, but we cannot process another refund for your order as it has already been refunded. If you have any further questions, please let us know.",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1007"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.16,
+      "result": {
+        "orderId": "ORD-1007",
+        "status": "delivered",
+        "orderDate": "2026-10-10",
+        "deliveredAt": "2026-10-14",
+        "carrierEta": null,
+        "items": [
+          {
+            "name": "Bath towel set",
+            "unitPrice": 34.5,
+            "qty": 1,
+            "finalSale": false
+          }
+        ],
+        "shippingFee": 4.9,
+        "total": 39.4,
+        "currency": "EUR",
+        "alreadyRefunded": true
+      }
+    },
+    {
+      "step": 2,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1007",
+        "reason_category": "damaged"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.08,
+      "result": {
+        "orderId": "ORD-1007",
+        "reasonCategory": "damaged",
+        "eligible": false,
+        "amount": 0,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "This order has already been refunded."
+        ],
+        "policyRefs": [
+          "refund_policy#one-refund-per-order"
+        ]
+      }
+    }
+  ],
+  "steps": 3,
+  "summary": "Ticket T-007: DENIED refund for ORD-1007.\nIntent: refund_request, reason: damaged\n- This order has already been refunded.\nTools used: lookup_order -> check_refund_eligibility"
+}

@@ -1,0 +1,121 @@
+{
+  "traceId": "705689915003",
+  "ticketId": "T-008",
+  "intent": "refund_request",
+  "decision": "approve_refund",
+  "orderId": "ORD-1010",
+  "reasonCategory": "late_delivery",
+  "refundAmount": 9.9,
+  "requiresHuman": false,
+  "reasons": [
+    "Within the 30-day window (3 days since delivery)."
+  ],
+  "policyRefs": [
+    "refund_policy#refund-windows",
+    "shipping_policy#late-deliveries"
+  ],
+  "customerReply": "Your refund of €9.90 for the late shipping has been approved and will be processed back to your original payment method within 5-10 business days. Thank you for your patience!",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1010"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.13,
+      "result": {
+        "orderId": "ORD-1010",
+        "status": "delivered",
+        "orderDate": "2026-10-25",
+        "deliveredAt": "2026-11-07",
+        "carrierEta": null,
+        "items": [
+          {
+            "name": "Ceramic plate set",
+            "unitPrice": 64,
+            "qty": 1,
+            "finalSale": false
+          }
+        ],
+        "shippingFee": 9.9,
+        "total": 73.9,
+        "currency": "EUR",
+        "alreadyRefunded": false
+      }
+    },
+    {
+      "step": 2,
+      "tool": "search_policy",
+      "args": {
+        "query": "shipping refund",
+        "top_k": 1
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 41.24,
+      "result": {
+        "results": [
+          {
+            "ref": "refund_policy#refund-windows",
+            "title": "Refund windows",
+            "text": "- Change of mind: refund within 30 days of delivery, items unused and in original packaging.\n- Damaged, defective, wrong item or not as described: refund within 60 days of delivery.\n- Late delivery: shipping fee refunded within 30 days of delivery if the carrier confirms the delivery was late.\n  Refunds go back to the original payment method within 5-10 business days.",
+            "score": 3.63
+          }
+        ]
+      }
+    },
+    {
+      "step": 3,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1010",
+        "reason_category": "late_delivery"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.07,
+      "result": {
+        "orderId": "ORD-1010",
+        "reasonCategory": "late_delivery",
+        "eligible": true,
+        "amount": 9.9,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "Within the 30-day window (3 days since delivery)."
+        ],
+        "policyRefs": [
+          "shipping_policy#late-deliveries"
+        ],
+        "daysSinceDelivery": 3,
+        "windowDays": 30
+      }
+    },
+    {
+      "step": 4,
+      "tool": "issue_refund",
+      "args": {
+        "order_id": "ORD-1010",
+        "amount": 9.9
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.2,
+      "result": {
+        "refundId": "RF-C7108E6A",
+        "orderId": "ORD-1010",
+        "amount": 9.9,
+        "currency": "EUR",
+        "ticketId": "T-008",
+        "status": "issued",
+        "createdAt": "2026-11-11T18:58:01.204Z"
+      }
+    }
+  ],
+  "steps": 5,
+  "summary": "Ticket T-008: APPROVED refund of 9.90 for ORD-1010.\nIntent: refund_request, reason: late_delivery\n- Within the 30-day window (3 days since delivery).\nTools used: lookup_order -> search_policy -> check_refund_eligibility -> issue_refund"
+}

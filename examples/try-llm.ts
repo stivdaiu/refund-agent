@@ -1,9 +1,9 @@
-import { loadSettings } from "./config.js";
-import { OpenAiLlm, toolSpecs, type ChatMessage } from "./llm.js";
-import { TicketSchema } from "./models.js";
-import { renderUserMessage, SYSTEM_PROMPT } from "./prompts.js";
-import { CaseStore, OrderStore, PolicyIndex } from "./stores.js";
-import { ALL_TOOLS, type ToolContext } from "./tools.js";
+import { loadSettings } from "../src/config.js";
+import { OpenAiLlm, toolSpecs, type ChatMessage } from "../src/llm.js";
+import { TicketSchema } from "../src/models.js";
+import { renderUserMessage, SYSTEM_PROMPT } from "../src/prompts.js";
+import { CaseStore, OrderStore, PolicyIndex } from "../src/stores.js";
+import { ALL_TOOLS, type ToolContext } from "../src/tools.js";
 
 const settings = loadSettings();
 const llm = new OpenAiLlm(settings.model);

@@ -1,0 +1,20 @@
+{
+  "traceId": "9002083473d1",
+  "ticketId": "T-013",
+  "intent": "other",
+  "decision": "out_of_scope",
+  "orderId": null,
+  "reasonCategory": null,
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "Inquiry about a poem is outside the scope of customer support."
+  ],
+  "policyRefs": [],
+  "customerReply": "Thank you for reaching out! However, I can only assist with inquiries related to orders, returns, and refunds. If you have any questions about those topics, feel free to ask!",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [],
+  "steps": 2,
+  "summary": "Ticket T-013: Declined: out of scope.\n- Inquiry about a poem is outside the scope of customer support."
+}

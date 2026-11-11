@@ -1,0 +1,21 @@
+{
+  "traceId": "c418ce58b235",
+  "ticketId": "T-014",
+  "intent": null,
+  "decision": "invalid_input",
+  "orderId": null,
+  "reasonCategory": null,
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "customer_email: Invalid email address",
+    "subject: Too small: expected string to have >=1 characters"
+  ],
+  "policyRefs": [],
+  "customerReply": "",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [],
+  "steps": 0,
+  "summary": "Ticket T-014: Rejected: invalid ticket input.\n- customer_email: Invalid email address\n- subject: Too small: expected string to have >=1 characters"
+}

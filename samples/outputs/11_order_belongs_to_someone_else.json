@@ -1,0 +1,32 @@
+{
+  "traceId": "c772d8fec843",
+  "ticketId": "T-011",
+  "intent": "refund_request",
+  "decision": "need_more_info",
+  "orderId": "ORD-1001",
+  "reasonCategory": null,
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "Order not found for the provided email."
+  ],
+  "policyRefs": [],
+  "customerReply": "I couldn't find your order with the provided details. Could you please check the order number or provide more information?",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "lookup_order",
+      "args": {
+        "order_id": "ORD-1001"
+      },
+      "ok": false,
+      "attempts": 1,
+      "durationMs": 0.21,
+      "error": "Order ORD-1001 was not found for this customer's email address."
+    }
+  ],
+  "steps": 3,
+  "summary": "Ticket T-011: Asked the customer for more information for ORD-1001.\nIntent: refund_request\n- Order not found for the provided email.\nTools used: lookup_order(failed)"
+}

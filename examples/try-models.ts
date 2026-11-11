@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { z } from "zod";
-import { OrderSchema, TicketSchema } from "./models.js";
+import { OrderSchema, TicketSchema } from "../src/models.js";
 
 // 1) A good ticket: note how the email is lower-cased and spaces are trimmed.
 const good = TicketSchema.safeParse({

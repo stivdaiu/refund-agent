@@ -1,0 +1,50 @@
+{
+  "traceId": "3f36c4e67060",
+  "ticketId": "T-004",
+  "intent": "refund_request",
+  "decision": "deny_refund",
+  "orderId": "ORD-1002",
+  "reasonCategory": "changed_mind",
+  "refundAmount": null,
+  "requiresHuman": false,
+  "reasons": [
+    "Request is 70 days after delivery; the window for 'changed_mind' is 30 days."
+  ],
+  "policyRefs": [
+    "refund_policy#refund-windows"
+  ],
+  "customerReply": "Thank you for reaching out about your refund request for the headphones. Unfortunately, we cannot process a refund as it has been 70 days since delivery, and our policy allows for refunds due to a change of mind only within 30 days. If you have any other questions, feel free to ask!",
+  "guardrailFlags": [],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1002",
+        "reason_category": "changed_mind"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.22,
+      "result": {
+        "orderId": "ORD-1002",
+        "reasonCategory": "changed_mind",
+        "eligible": false,
+        "amount": 0,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "Request is 70 days after delivery; the window for 'changed_mind' is 30 days."
+        ],
+        "policyRefs": [
+          "refund_policy#refund-windows"
+        ],
+        "daysSinceDelivery": 70,
+        "windowDays": 30
+      }
+    }
+  ],
+  "steps": 2,
+  "summary": "Ticket T-004: DENIED refund for ORD-1002.\nIntent: refund_request, reason: changed_mind\n- Request is 70 days after delivery; the window for 'changed_mind' is 30 days.\nTools used: check_refund_eligibility"
+}

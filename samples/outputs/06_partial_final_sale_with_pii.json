@@ -1,0 +1,76 @@
+{
+  "traceId": "4e710c7a1bb3",
+  "ticketId": "T-006",
+  "intent": "refund_request",
+  "decision": "approve_refund",
+  "orderId": "ORD-1009",
+  "reasonCategory": "changed_mind",
+  "refundAmount": 25,
+  "requiresHuman": false,
+  "reasons": [
+    "Within the 30-day window (6 days since delivery).",
+    "Final-sale items were excluded from the refund amount."
+  ],
+  "policyRefs": [
+    "refund_policy#final-sale-items",
+    "refund_policy#refund-windows"
+  ],
+  "customerReply": "Your refund of 25 EUR for the candles has been successfully processed. It should appear on your card shortly. If you have any further questions, feel free to reach out!",
+  "guardrailFlags": [
+    "pii_redacted"
+  ],
+  "overrides": [],
+  "toolCalls": [
+    {
+      "step": 1,
+      "tool": "check_refund_eligibility",
+      "args": {
+        "order_id": "ORD-1009",
+        "reason_category": "changed_mind"
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.22,
+      "result": {
+        "orderId": "ORD-1009",
+        "reasonCategory": "changed_mind",
+        "eligible": true,
+        "amount": 25,
+        "currency": "EUR",
+        "requiresHuman": false,
+        "reasons": [
+          "Within the 30-day window (6 days since delivery).",
+          "Final-sale items were excluded from the refund amount."
+        ],
+        "policyRefs": [
+          "refund_policy#final-sale-items",
+          "refund_policy#refund-windows"
+        ],
+        "daysSinceDelivery": 6,
+        "windowDays": 30
+      }
+    },
+    {
+      "step": 2,
+      "tool": "issue_refund",
+      "args": {
+        "order_id": "ORD-1009",
+        "amount": 25
+      },
+      "ok": true,
+      "attempts": 1,
+      "durationMs": 0.31,
+      "result": {
+        "refundId": "RF-0B0A3DBE",
+        "orderId": "ORD-1009",
+        "amount": 25,
+        "currency": "EUR",
+        "ticketId": "T-006",
+        "status": "issued",
+        "createdAt": "2026-11-11T18:57:50.244Z"
+      }
+    }
+  ],
+  "steps": 3,
+  "summary": "Ticket T-006: APPROVED refund of 25.00 for ORD-1009.\nIntent: refund_request, reason: changed_mind\n- Within the 30-day window (6 days since delivery).\n- Final-sale items were excluded from the refund amount.\nTools used: check_refund_eligibility -> issue_refund\nGuardrail flags: pii_redacted"
+}
