@@ -1,0 +1,27 @@
+{
+  "name": "refund-agent",
+  "version": "1.0.0",
+  "description": "AI agent that resolves e-commerce refund tickets",
+  "type": "module",
+  "scripts": {
+    "hello": "tsx src/hello.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "openai": "^7.55.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.12"
+  }
+}
