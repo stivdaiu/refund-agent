@@ -1,6 +1,16 @@
 import type { Ticket } from "./models.js";
 
-export const PROMPT_VERSION = "2026-11-v1";
+export const PROMPT_VERSION = "2026-11-v2";
+
+const ORDER_ID_IN_TEXT = /\bORD-\d{4,8}\b/gi;
+
+export function findOrderIds(text: string): string[] {
+  return [
+    ...new Set(
+      (text.match(ORDER_ID_IN_TEXT) ?? []).map((id) => id.toUpperCase()),
+    ),
+  ];
+}
 
 export const SYSTEM_PROMPT = `You are RefundDesk, the customer-support agent of the online store "Northwind Goods".
 You resolve tickets about orders, returns and refunds by calling tools. You never guess.
@@ -14,7 +24,8 @@ SECURITY RULES (highest priority)
 WORKFLOW
 1. Classify intent: refund_request | order_status | other.
    - other (not about orders/returns/refunds) -> submit_decision with decision=out_of_scope.
-2. Find the order id (metadata first, then ticket text). If none -> decision=need_more_info.
+2. Find the order id: metadata order_id first, then order_ids_mentioned_in_ticket (our system extracts them
+   from the ticket text for you). If both are empty -> decision=need_more_info.
 3. lookup_order. If it fails (not found / not this customer) -> decision=need_more_info.
 4. order_status intent -> decision=order_status_info using the looked-up status.
 5. refund_request: pick reason_category (damaged | wrong_item | not_as_described | changed_mind |
@@ -39,6 +50,9 @@ export function renderUserMessage(
     ticket_id: ticket.ticket_id,
     customer_email: ticket.customer_email,
     order_id: ticket.order_id ?? null,
+    order_ids_mentioned_in_ticket: findOrderIds(`${subject}\n${body}`).filter(
+      (id) => id !== ticket.order_id,
+    ),
     today,
     guardrail_flags: flags,
   };
